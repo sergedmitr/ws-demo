@@ -10,7 +10,7 @@ public class ApiController {
 
 	@GetMapping("/health")
 	public ResponseEntity<Object> health() {
-		Health health = new Health("Ok world.");
+		Health health = new Health("Ok Nastya.");
 		return new ResponseEntity<>(health, HttpStatus.OK);
 	}
 	
