@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: my-health-deployment
+    namespace: zipper
+spec:
+    replicas: 4
+    selector:
+        matchLabels:
+            app: mhealth-app
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                app: mhealth-app
+        spec:
+            containers:
+              - name: mhealth
+                image: sergedmitr/ws-demo
+                ports:
+                  - name: web
+                    containerPort: 8000

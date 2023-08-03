@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+    name: my-health-rs
+    namespace: zipper
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: mhealth
+    template:
+        metadata:
+            labels:
+                app: mhealth
+        spec:
+            containers:
+              - name: mhealth
+                image: sergedmitr/ws-demo
+                ports:
+                  - containerPort: 8000
