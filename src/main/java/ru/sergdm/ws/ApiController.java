@@ -14,8 +14,14 @@ public class ApiController {
 		return new ResponseEntity<>(health, HttpStatus.OK);
 	}
 	
-	@GetMapping("/name")
+	@GetMapping("/")
 	public ResponseEntity<Object> name() {
+		SystemName name = new SystemName();
+		return new ResponseEntity<>(name, HttpStatus.OK);
+	}
+	
+	@GetMapping("/name")
+	public ResponseEntity<Object> fullName() {
 		SystemName name = new SystemName();
 		return new ResponseEntity<>(name, HttpStatus.OK);
 	}
