@@ -26,6 +26,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://arch.homework/otusapp/sadmitriev/name",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"name"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
