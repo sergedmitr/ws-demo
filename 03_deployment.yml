@@ -4,7 +4,7 @@ metadata:
     name: my-health-deployment
     namespace: zipper
 spec:
-    replicas: 4
+    replicas: 3
     selector:
         matchLabels:
             app: mhealth-app
@@ -21,3 +21,11 @@ spec:
                 ports:
                   - name: web
                     containerPort: 8000
+                readinessProbe:
+                    httpGet:
+                        path: /health
+                        port: 8000
+                livenessProbe:
+                    httpGet:
+                        path: /health
+                        port: 8000
