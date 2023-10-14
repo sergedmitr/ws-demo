@@ -1,4 +1,4 @@
-package ru.sergdm.ws;
+package ru.sergdm.ws.model;
 
 public class Health {
 	private String status;

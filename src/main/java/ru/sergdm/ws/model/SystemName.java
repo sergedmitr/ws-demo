@@ -1,4 +1,4 @@
-package ru.sergdm.ws;
+package ru.sergdm.ws.model;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
