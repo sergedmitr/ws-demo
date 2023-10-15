@@ -56,7 +56,7 @@ public class ApiController {
 		return new ResponseEntity<>(name, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/auth/")
+	@GetMapping(value = "/auth/**")
 	public ResponseEntity<?> auth(@CookieValue(value = "session", required = false) String session) {
 		logger.info("auth = {}", session);
 		if (session == null) {
