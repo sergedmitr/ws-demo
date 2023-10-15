@@ -13,8 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,9 +58,9 @@ public class ApiController {
 		SystemName name = new SystemName();
 		return new ResponseEntity<>(name, HttpStatus.OK);
 	}
-	
-	@GetMapping(value = "/auth/**")
-	public ResponseEntity<?> auth(@CookieValue(value = "session", required = false) String session) {
+
+	@RequestMapping(value = "/auth/**")
+	public ResponseEntity<?> authOnGet(@CookieValue(value = "session", required = false) String session) {
 		logger.info("auth = {}", session);
 		if (session == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
