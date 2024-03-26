@@ -1,0 +1,38 @@
+@startuml
+
+  HTTP - [Nginx Ingress]
+
+node "k8s" {
+  [MS Orders]
+  [MS Payments]
+  [MS Warehouse]
+  [MS Delivery]
+}
+
+database "mydb" {
+  folder "Orders" {
+    [orders]
+  }
+  frame "Payments" {
+    [money_moves]
+  }
+  frame "Warehouse" {
+    [rests]
+    [reserves]
+  }
+  frame "Delivery" {
+    [deliveries]
+  }
+}
+
+
+[Nginx Ingress] --> [MS Orders]
+[MS Orders] --> [MS Payments]
+[MS Orders] --> [MS Warehouse]
+[MS Orders] --> [MS Delivery]
+[MS Orders] --> [orders]
+[MS Payments] --> [money_moves]
+[MS Warehouse] --> [rests]
+[MS Warehouse] --> [reserves]
+[MS Delivery] --> [deliveries]
+@enduml

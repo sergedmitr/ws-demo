@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "63aaf8c3-ee22-4f7c-bf02-a4fa78baff87",
+		"name": "Otus-Saga-k8s-Clear",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3042142"
+	},
+	"item": [
+		{
+			"name": "Delete All Orders k8s",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Payments k8s",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"moveDt\": \"2023-10-19\",\r\n    \"amount\": \"1000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}:8010/moves",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"moves"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete All Reserves warehouse k8s",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8020/reserves",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8020",
+					"path": [
+						"reserves"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete All Rests warehouse k8s",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8020/rests",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8020",
+					"path": [
+						"rests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete All Deliveries Delivery k8s",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8030/deliveries",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8030",
+					"path": [
+						"deliveries"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "arch.homework",
+			"type": "string"
+		}
+	]
+}

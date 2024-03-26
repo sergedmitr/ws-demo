@@ -30,6 +30,7 @@ import ru.sergdm.ws.model.AuthResponse;
 import ru.sergdm.ws.model.Credentials;
 import ru.sergdm.ws.model.Health;
 import ru.sergdm.ws.model.SystemName;
+import ru.sergdm.ws.service.IAccidentalService;
 import ru.sergdm.ws.service.ILoginService;
 import ru.sergdm.ws.service.ISessionService;
 
@@ -40,13 +41,30 @@ public class ApiController {
 	private ISessionService sessionService;
 	@Autowired
 	private ILoginService loginService;
+	@Autowired
+	private IAccidentalService accidentalService;
 
 	@GetMapping("/health")
 	public ResponseEntity<Object> health() {
 		Health health = new Health("OK");
 		return new ResponseEntity<>(health, HttpStatus.OK);
 	}
-	
+
+	@GetMapping("/accidental")
+	public ResponseEntity<Object> accidental() {
+		try {
+			int mls = accidentalService.accidental();
+			int rest = mls % 5;
+			logger.info("mls = {}, rest = {}", mls, rest);
+			if (rest == 3) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(rest);
+			}
+			return new ResponseEntity<>(mls, HttpStatus.OK);
+		} catch (InterruptedException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+
 	@GetMapping("/")
 	public ResponseEntity<Object> name() {
 		SystemName name = new SystemName();

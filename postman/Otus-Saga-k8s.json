@@ -1,0 +1,660 @@
+{
+	"info": {
+		"_postman_id": "b8673f16-64b2-47d9-ab24-fa30d64c6366",
+		"name": "Otus-Saga-k8s",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3042142"
+	},
+	"item": [
+		{
+			"name": "Reserve Order k8s",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData);\r",
+							"\r",
+							"    var temp = jsonData.orderId;\r",
+							"    console.log(temp);\r",
+							"    pm.collectionVariables.set(\"orderId\", temp);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/reserve",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Order Idempotent k8s",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"pm.test(\"Check content\", function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.product).to.eql(\"automobile-27\")\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderId\": \"{{orderId}}\",\r\n    \"product\": \"{{productId}}\",\r\n    \"quantity\": \"1\",\r\n    \"price\": \"300\",\r\n    \"userId\": 4,\r\n    \"delivery\": \"{{delivery}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Replenish 500 Payments k8s",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"moveDt\": \"2023-10-23\",\r\n    \"amount\": \"500\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8010/replenish/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"replenish",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Check Rests Payments k8s 500",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							"    console.log(pm.response.data);\r",
+							" pm.expect(pm.response.text()).to.include(\"500.00\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8010/rests/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"rests",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Add Rest Warehouse k8s",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"productId\": \"automobile-27\",\r\n    \"amount\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8020/add-rest",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8020",
+					"path": [
+						"add-rest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process Order 1 k8s Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData);\r",
+							"\r",
+							"    var temp = jsonData.deliveryId;\r",
+							"    console.log(temp);\r",
+							"    pm.collectionVariables.set(\"deliveryId\", temp);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/process/{{orderId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"process",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T check Delivery k8s",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"pm.test(\"Check content\", function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"CREATED\")\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8030/deliveries/{{deliveryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8030",
+					"path": [
+						"deliveries",
+						"{{deliveryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Check Rests Payments k8s 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"200.00\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8010/rests/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"rests",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reserve Order 2 k8s",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData);\r",
+							"\r",
+							"    var temp = jsonData.orderId;\r",
+							"    console.log(temp);\r",
+							"    pm.collectionVariables.set(\"orderId2\", temp);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/reserve",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Order 2 Idempotent k8s",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response code\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"pm.test(\"Check content\", function() {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.product).to.eql(\"automobile-27\")\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"orderId\": {{orderId2}},\r\n    \"product\": \"automobile-27\",\r\n    \"quantity\": \"1\",\r\n    \"price\": \"290\",\r\n    \"userId\": 4,\r\n    \"delivery\": \"FOURTH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process Order 2 k8s Fail Payment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"Not enough money\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/process/{{orderId2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"process",
+						"{{orderId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Replenish 150 Payments k8s",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"moveDt\": \"2023-10-23\",\r\n    \"amount\": \"150\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8010/replenish/4",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"replenish",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process Order 2 k8s Fail Reserve",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"Not enough product\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/process/{{orderId2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"process",
+						"{{orderId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Check 1 Rests Payments k8s 350",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"350.00\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8010/rests/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"rests",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Add Rest Again Warehouse k8s",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"productId\": \"automobile-27\",\r\n    \"amount\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}:8020/add-rest",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8020",
+					"path": [
+						"add-rest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Process Order 2 k8s Fail Delivery",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"Timeslot = FOURTH already in use\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8080/otusapp/sadmitriev/orders/process/{{orderId2}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8080",
+					"path": [
+						"otusapp",
+						"sadmitriev",
+						"orders",
+						"process",
+						"{{orderId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T Check 2 Rests Payments k8s 350",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check content\", function() {\r",
+							" pm.expect(pm.response.text()).to.include(\"350.00\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}:8010/rests/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"port": "8010",
+					"path": [
+						"rests",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "arch.homework",
+			"type": "string"
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		},
+		{
+			"key": "orderId2",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": "4",
+			"type": "string"
+		},
+		{
+			"key": "delivery",
+			"value": "FOURTH",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "automobile-27",
+			"type": "string"
+		},
+		{
+			"key": "deliveryId",
+			"value": ""
+		}
+	]
+}
